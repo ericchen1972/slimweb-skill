@@ -17,6 +17,13 @@ SlimWeb MCP tools are execution primitives. High-level user requests should be d
 
 ## Common High-Level Requests
 
+### Theme/page/homepage work
+
+- Read theme/page state first.
+- Use style profile tools to preserve high-level visual direction and avoid repeating the same user preference discovery.
+- Use upload tools before referencing new media in page/theme content.
+- Get preview URLs after page/theme mutations.
+
 ### Product/category/navigation work
 
 - Inspect categories and navigation first.
@@ -36,6 +43,7 @@ SlimWeb MCP tools are execution primitives. High-level user requests should be d
 - Plan campaign mechanics before creating coupons, pages, assets, or navigation entries.
 - Confirm discount value, validity period, and scope when missing.
 - Apply coupon/discount changes before updating page or navigation copy that advertises the offer.
+- Prefer a coherent small set of campaign assets over updating unrelated site areas.
 
 ### Payment/logistics work
 
@@ -53,4 +61,3 @@ End with:
 - What was left unchanged.
 - What still needs user confirmation.
 - Any unsupported request that was not executed.
-

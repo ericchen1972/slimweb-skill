@@ -32,6 +32,29 @@ Use safe defaults only when they will not create misleading or expensive data:
 5. Create or update campaign page sections, banners, article content, navigation items, or product/category highlights.
 6. Return the exact created items and how the user can review them.
 
+## Useful Tool Families
+
+- Homepage/page promotion: `slimweb_pages_get_home_content`, `slimweb_pages_update_home_content`, `slimweb_pages_upsert`.
+- Coupons: `slimweb_coupon_templates_list`, `slimweb_coupon_templates_upsert`, `slimweb_members_coupons_issue`.
+- Products/categories: product and category list/get/upsert tools.
+- Articles: `slimweb_articles_list`, `slimweb_articles_upsert`.
+- Navigation: `slimweb_nav_items_list`, `slimweb_nav_items_upsert`.
+- Media: upload tools and asset tools.
+- Preview: `slimweb_preview_get_page_url`.
+
+## Campaign Building Blocks
+
+- Homepage hero or promotion band.
+- Landing page for the campaign.
+- Product/category collection.
+- Coupon template for member-issued coupons.
+- Discount code for code-based offers.
+- Article for content marketing or SEO.
+- Navigation entry linking to the campaign.
+- Uploaded images for banners, cards, and social-style visuals.
+
+Match the building blocks to the user's goal; do not create every possible asset by default.
+
 ## Promotion Boundaries
 
 - Do not invent unsupported promotion mechanics.
@@ -47,4 +70,3 @@ Use safe defaults only when they will not create misleading or expensive data:
 | "Create 88% off code MOM88" | Create or update a discount code if supported; confirm scope/date if missing. |
 | "Full-site anniversary sale next week" | Ask or infer exact date range from locale only when safe; define campaign assets and coupon rules. |
 | "Promote men's clothing" | Inspect product category, create/update campaign content and optional coupon scoped to that category. |
-
