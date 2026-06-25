@@ -28,9 +28,11 @@ description: Use when operating a SlimWeb site through SlimWeb MCP.
 3. Use `slimweb_design_context_get` to obtain the current site design summary, color scheme, and framework.
 4. If the page needs images, follow the Common Image Rules.
 5. Design from the site design summary, color scheme, and framework.
-6. HTML may include custom CSS and JavaScript needed for visual design.
-7. Use `slimweb_pages_create` to create the page.
-8. Return the page URL after creation. Use `slimweb_preview_get_page_url` for preview verification when useful.
+6. HTML may include custom CSS and page-scoped inline JavaScript needed for visual design. Do not add external CDN tags in HTML.
+7. Choose `enabled_libraries` from `animate_css`, `aos`, `swiper`, `gsap`, `scrolltrigger`, and `scrollsmoother` only when the user need calls for them; pass `[]` when no external support is used. Prefer HTML + Tailwind + custom CSS for accordion, FAQ, tabs, and simple interactions. Prefer `animate_css` for small emphasis, `aos` for simple scroll reveal, `swiper` only for sliders/carousels, and GSAP plugins only for clearly advanced animation or scroll storytelling.
+8. Use `slimweb_pages_create` to create the page and always include `enabled_libraries`.
+9. Unless the user explicitly opted out of SEO, use `slimweb_content_seo_update` with `workflow_context: page_create`.
+10. Return the page URL after creation. Use `slimweb_preview_get_page_url` for preview verification when useful.
 
 ## Page Edit Flow
 
@@ -39,8 +41,10 @@ description: Use when operating a SlimWeb site through SlimWeb MCP.
 3. If the page is not found, stop immediately and tell the user.
 4. If adding or replacing images, follow the Common Image Rules.
 5. Modify HTML using the current content and the design summary from `slimweb_design_context_get`.
-6. Use `slimweb_pages_update` to save the page.
-7. Return the page URL after editing. Use `slimweb_preview_get_page_url` for preview verification when useful.
+6. Preserve or adjust the page `enabled_libraries` according to the updated page behavior; pass `[]` when no external support is used.
+7. Use `slimweb_pages_update` to save the page and always include `enabled_libraries`.
+8. Unless the user explicitly opted out of SEO, use `slimweb_content_seo_update` with `workflow_context: page_update`.
+9. Return the page URL after editing. Use `slimweb_preview_get_page_url` for preview verification when useful.
 
 ## Article Create Flow
 
