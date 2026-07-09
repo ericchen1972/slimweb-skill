@@ -13,6 +13,16 @@ When the user asks where to start, says they are new, or asks what is still miss
 - Do not dump the full checklist unless the user asks.
 - Do not treat every user as a beginner if the progress tool shows work has already been completed.
 
+## Consumer MCP URL
+
+When the merchant asks how customers can use AI with their storefront, or when you are helping prepare the homepage, member center, or customer-support entry points, use `slimweb_settings_get` to read `settings.client_mcp_url`.
+
+The `client_mcp_url` is the site-specific consumer MCP endpoint. It is meant for shoppers and members, not the store admin. Customers can connect this URL in supported AI clients so the AI can help them interact with the storefront, such as browsing products, checking member or order flows when authenticated, and getting customer-support assistance through the consumer-facing MCP surface.
+
+Explain this in practical merchant language: "This is the AI connection link for your customers." Encourage the merchant to publish it where customers naturally start: the homepage, member center, footer, or customer-service area. A homepage button such as "Use AI shopping assistant" or "Connect this store to your AI assistant" is usually clearer than hiding the link in settings.
+
+Do not treat `client_mcp_url` as an editable setting. It is returned by `slimweb_settings_get` for discovery and publishing guidance.
+
 ## Build Priorities
 
 ### Required For Launch
