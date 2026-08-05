@@ -24,7 +24,19 @@ Use this when the user asks for theme design, page design, homepage updates, lan
 
 Do not treat `Default` as a theme-shell editing target. Default page content and custom theme shell/root elements are separate concepts.
 
-Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. Before writing `navbar`, inspect the returned `website_type` and storefront action requirements. Unless `website_type=brand`, preserve working cart, registration, and login entries. Their visual treatment and responsive placement may closely follow a reference site, but their functions cannot be omitted. Add custom content only to the slot where the user explicitly requested it. Do not move data supplied for one placement into another slot; footer contact or social URLs do not become `floating_actions` without a separate request. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
+Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. Every Theme navbar always contains exactly one clickable `data-storefront-member-auth-slot` and one clickable `data-storefront-cart-slot`, independent of `website_type` and independent of whether a reference navbar shows those functions. The member slot represents one combined registration/login control and must not be split. The cart slot may include the chosen icon and a styled `data-cart-count` badge. Use reference-site styling for their visual treatment and responsive placement, but never reproduce Webless runtime markup or add `data-storefront-auth-open`, `data-storefront-auth-modal`, `data-storefront-cart-root`, or `data-cart-trigger`; Webless decides visibility and injects behavior. A minimal valid action region is:
+
+```html
+<div data-storefront-commerce-actions>
+  <button type="button" data-storefront-member-auth-slot>註冊／登入</button>
+  <button type="button" data-storefront-cart-slot aria-label="購物車">
+    <svg aria-hidden="true"><!-- Theme cart icon --></svg>
+    <span data-cart-count>0</span>
+  </button>
+</div>
+```
+
+Add other custom content only to the slot where the user explicitly requested it. Do not move data supplied for one placement into another slot; footer contact or social URLs do not become `floating_actions` without a separate request. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
 
 ## Page Design Pattern
 
