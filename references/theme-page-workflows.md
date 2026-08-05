@@ -24,7 +24,7 @@ Use this when the user asks for theme design, page design, homepage updates, lan
 
 Do not treat `Default` as a theme-shell editing target. Default page content and custom theme shell/root elements are separate concepts.
 
-Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
+Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. Add custom content only to the slot where the user explicitly requested it. Do not move data supplied for one placement into another slot; footer contact or social URLs do not become `floating_actions` without a separate request. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
 
 ## Page Design Pattern
 
