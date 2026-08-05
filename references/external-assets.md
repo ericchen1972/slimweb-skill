@@ -9,6 +9,8 @@ Use this when the user asks to add custom CSS, custom JavaScript, third-party wi
 - Do not use external CSS/JS to bypass SlimWeb settings when a supported MCP tool exists.
 - Keep custom code scoped as narrowly as possible: page-level before global when the change is page-specific.
 - Preserve existing custom code unless replacement is explicitly requested.
+- Page visual JavaScript may use inline code plus supported `enabled_libraries`: `animate_css`, `aos`, `swiper`, `gsap`, `scrolltrigger`, and `scrollsmoother`. Do not add external CDN tags manually.
+- Theme fragments (`navbar`, `floating_actions`, and `footer`) do not load JavaScript or Theme-level `enabled_libraries`.
 
 ## Responsive and Visual Impact
 
@@ -38,7 +40,6 @@ Reject or warn when:
 
 ## Placement Guidance
 
-- Global CSS/JS: only for site-wide behavior such as analytics, global chat, global typography, or shared tracking.
+- Global CSS/JS: use only the dedicated platform setting or integration intended for that behavior; do not smuggle it into Theme fragments.
 - Page CSS/JS: for a landing page, campaign page, or special visual effect.
 - Component/section style: preferred when the MCP page tool supports scoped section styling.
-

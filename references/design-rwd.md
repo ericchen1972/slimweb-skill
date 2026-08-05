@@ -22,6 +22,7 @@ The agent must not create a desktop-only layout.
 - Tables should become cards, simplified columns, or controlled horizontal scroll on mobile.
 - Forms must preserve visible labels, clear errors, and mobile input types.
 - Navigation must define mobile menu behavior, cart/login placement, and icon treatment.
+- Floating actions must define fixed-edge spacing, safe-area behavior, stacking order, and non-overlapping touch targets on mobile.
 
 ## Visual Safety Checks
 
@@ -49,4 +50,3 @@ When planning or summarizing a page design, include:
 - "Full screen hero" becomes desktop immersive hero, mobile content-first hero with safe image crop.
 - "Product comparison table" becomes desktop table, mobile comparison cards or horizontal scroll.
 - "Put image beside text" becomes desktop side-by-side, mobile image/text order chosen for conversion and readability.
-

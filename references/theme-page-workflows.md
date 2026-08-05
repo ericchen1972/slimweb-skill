@@ -1,6 +1,6 @@
 # Theme, Page, and Homepage Workflows
 
-Use this when the user asks for theme design, page design, homepage updates, landing pages, visual sections, navbar/footer changes, online support placement, preview URLs, or design-system style changes.
+Use this when the user asks for theme design, page design, homepage updates, landing pages, visual sections, navbar/footer/floating-action changes, preview URLs, or design-system style changes.
 
 ## Available Tool Families
 
@@ -13,16 +13,18 @@ Use this when the user asks for theme design, page design, homepage updates, lan
 
 ## Theme Design Pattern
 
-1. Confirm or select `site_id`.
+1. Follow the MCP site-selection rules and identify the target site.
 2. Read themes with `slimweb_themes_list`.
 3. If creating a new visual direction, create a non-Default theme with `slimweb_themes_create_from_default`.
 4. Read context with `slimweb_theme_shell_get_context` and style history with `slimweb_theme_style_profile_get`.
-5. Plan navbar, footer, online support, root CSS, colors, typography, spacing, and responsive behavior.
+5. Plan the fixed `navbar`, `floating_actions`, and `footer` slots plus root CSS, colors, typography, spacing, and responsive behavior.
 6. Update root elements with `slimweb_themes_update_root_elements`.
 7. Save the design rationale and constraints with style profile tools.
 8. Get a preview URL and report what to inspect.
 
 Do not treat `Default` as a theme-shell editing target. Default page content and custom theme shell/root elements are separate concepts.
+
+Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
 
 ## Page Design Pattern
 
@@ -33,6 +35,8 @@ Do not treat `Default` as a theme-shell editing target. Default page content and
 5. Update page/home content with the narrowest page tool.
 6. Get a preview URL.
 7. Summarize changed sections and responsive behavior.
+
+Page content may use inline JavaScript and the supported page-level `enabled_libraries`: `animate_css`, `aos`, `swiper`, `gsap`, `scrolltrigger`, and `scrollsmoother`. Do not add CDN tags manually.
 
 ## Homepage Promotion Pattern
 

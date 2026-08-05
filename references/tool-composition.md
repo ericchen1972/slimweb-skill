@@ -22,6 +22,8 @@ SlimWeb MCP tools are execution primitives. High-level user requests should be d
 - Read theme/page state first.
 - Use style profile tools to preserve high-level visual direction and avoid repeating the same user preference discovery.
 - Use upload tools before referencing new media in page/theme content.
+- Treat `navbar`, `floating_actions`, and `footer` as the only fixed Theme fragment keys. Keep custom fragment markup user-defined and do not auto-bind it to contact data.
+- Keep JavaScript and `enabled_libraries` page-scoped; Theme fragments do not load them.
 - Get preview URLs after page/theme mutations.
 
 ### Product/category/navigation work

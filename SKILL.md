@@ -28,6 +28,13 @@ Explain this in practical merchant language: "This is the AI connection link for
 
 Do not treat `client_mcp_url` as an editable setting. It is returned by `slimweb_settings_get` for discovery and publishing guidance.
 
+## Reference Websites And Visual JavaScript
+
+1. For page visual work, use page-scoped inline JavaScript when needed and select external visual support only through `enabled_libraries`. Available keys are `animate_css`, `aos`, `swiper`, `gsap`, `scrolltrigger`, and `scrollsmoother`; pass `[]` when none are needed. Prefer CSS or plain JavaScript for simple interactions, `aos` for basic scroll reveal, `swiper` for sliders, and GSAP libraries for advanced animation or scroll storytelling. Do not add external CDN tags to page HTML. Do not load JavaScript or `enabled_libraries` at Theme level.
+2. When the user provides a reference URL without saying which parts to follow, ask whether the reference should include Theme elements such as the navbar, footer, and other site-wide elements. Explain that the reference site's navigation, footer structure, labels, actions, and data requirements may not fit the user's actual site data. Wait for the user's answer before designing or changing either the Theme or page content from that reference.
+3. When a reference URL is provided, inspect the rendered desktop and mobile pages and, when accessible and useful, the DOM, styles, interactions, and loaded animation libraries. Reproduce the reference layout, proportions, spacing, responsive behavior, and animation effects as closely as SlimWeb permits while using the user's own brand, content, and assets. Do not replace an inspectable reference with a generic mood-board interpretation. If the reference cannot be inspected reliably, state the limitation before claiming visual fidelity.
+4. Theme root fragments use only the fixed `navbar`, `floating_actions`, and `footer` slots. Content inside a slot is user-defined: preserve supplied URLs and modal markup, allow a control with no URL to remain a plain control, and do not auto-bind it to existing site/contact data. Do not pause merely to request a missing URL when a plain control satisfies the request. Theme fragments do not load JavaScript or `enabled_libraries`.
+
 ## Build Priorities
 
 ### Required For Launch
@@ -85,7 +92,7 @@ The AI can help the user:
 - Draft product names, descriptions, specifications, and selling points.
 - Generate or refine product images, article covers, campaign visuals, and homepage hero images.
 - Create and edit homepage, landing pages, brand pages, policy pages, and articles.
-- Design or refine themes, visual direction, color usage, navbar, footer, root CSS, and page atmosphere.
+- Design or refine themes, visual direction, color usage, navbar, floating actions, footer, root CSS, and page atmosphere.
 - Prepare SEO / AEO / GEO metadata from real business and content context.
 - Set up or improve coupons, discount codes, newsletters, email templates, and promotional content.
 - Explain what still blocks launch and what can wait until later.
