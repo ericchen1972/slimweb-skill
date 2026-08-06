@@ -24,19 +24,39 @@ Use this when the user asks for theme design, page design, homepage updates, lan
 
 Do not treat `Default` as a theme-shell editing target. Default page content and custom theme shell/root elements are separate concepts.
 
-Theme root slots are fixed; arbitrary user-defined HTML is allowed inside each slot. Every Theme navbar always contains exactly one clickable `data-storefront-member-auth-slot` and one clickable `data-storefront-cart-slot`, independent of `website_type` and independent of whether a reference navbar shows those functions. The member slot represents one combined registration/login control and must not be split. The cart slot may include the chosen icon and a styled `data-cart-count` badge. Use reference-site styling for their visual treatment and responsive placement, but never reproduce Webless runtime markup or add `data-storefront-auth-open`, `data-storefront-auth-modal`, `data-storefront-cart-root`, or `data-cart-trigger`; Webless decides visibility and injects behavior. A minimal valid action region is:
+Theme root slots are fixed; arbitrary user-defined static HTML remains allowed inside each root slot. Every Theme navbar has exactly three runtime slots, independent of `website_type` and reference content:
+
+1. Exactly one empty static `div`, `nav`, or `header` with `data-storefront-primary-navigation-slot`.
+2. Exactly one clickable `data-storefront-member-auth-slot` for the combined registration/login control.
+3. Exactly one clickable `data-storefront-cart-slot`; it may include the chosen icon and a styled `data-cart-count` badge.
+
+Navbar HTML must be balanced static HTML only: no PHP, Blade, components, dynamic attributes, or serialized runtime labels, URLs, category trees, or ordinary navigation trees. Webless fills the empty primary slot and owns the canonical runtime hooks:
+
+- `data-storefront-primary-navigation-runtime`
+- `data-storefront-category-menu`
+- `data-storefront-navbar-categories`
+- `data-storefront-nav-items`
+- `data-storefront-nav-trigger`
+- `data-storefront-nav-panel`
+- `data-storefront-nav-node`
+- `data-storefront-nav-children`
+
+Theme root CSS must style all three runtime presentations: grouped categories, direct-navbar categories, and ordinary recursive navigation. Only the category presentation selected by Webless renders at a time. Style the canonical hooks and the runtime-applied hidden, mobile-open, and expanded states, including `[hidden]` and `aria-expanded`, without making hidden content visible. Webless—not Theme JavaScript—is the source of interaction and accessibility state. Do not add Theme JavaScript or Theme-level `enabled_libraries`.
+
+Use reference-site styling for the three slots' visual treatment and responsive placement, but never reproduce Webless runtime markup or add `data-storefront-auth-open`, `data-storefront-auth-modal`, `data-storefront-cart-root`, or `data-cart-trigger`; Webless decides visibility and injects behavior. A minimal valid navbar region is:
 
 ```html
-<div data-storefront-commerce-actions>
+<nav data-storefront-navbar-shell>
+  <div data-storefront-primary-navigation-slot></div>
   <button type="button" data-storefront-member-auth-slot>註冊／登入</button>
   <button type="button" data-storefront-cart-slot aria-label="購物車">
     <svg aria-hidden="true"><!-- Theme cart icon --></svg>
     <span data-cart-count>0</span>
   </button>
-</div>
+</nav>
 ```
 
-Add other custom content only to the slot where the user explicitly requested it. Do not move data supplied for one placement into another slot; footer contact or social URLs do not become `floating_actions` without a separate request. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round. Theme JavaScript and Theme-level `enabled_libraries` are not supported.
+Add other custom content only to the root slot where the user explicitly requested it. Do not move data supplied for one placement into another root slot; footer contact or social URLs do not become `floating_actions` without a separate request. For `floating_actions`, use links and modal content exactly as the user supplies it. Do not bind custom controls to existing contact fields, invent or require missing URLs, or reject an unusual control merely because it has no predefined platform behavior. A missing URL remains a plain control without another clarification round.
 
 ## Page Design Pattern
 
