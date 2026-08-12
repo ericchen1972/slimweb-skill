@@ -43,6 +43,8 @@ Navbar HTML must be balanced static HTML only: no PHP, Blade, components, dynami
 
 Theme root CSS must style all three runtime presentations: grouped categories, direct-navbar categories, and ordinary recursive navigation. Only the category presentation selected by Webless renders at a time. Style the canonical hooks and the runtime-applied hidden, mobile-open, and expanded states, including `[hidden]` and `aria-expanded`, without making hidden content visible. Webless—not Theme JavaScript—is the source of interaction and accessibility state. Do not add Theme JavaScript or Theme-level `enabled_libraries`.
 
+Do not use 1440px as the final desktop proof. Verify 1536px and 1800px, where the canonical 2xl desktop navigation is active; all ordinary top-level links must share one row and the navbar height must remain compact. Open the auth, mobile-menu, and cart overlays and compare their bounding rectangles with the viewport. Navbar ancestors using `backdrop-filter`, `filter`, `transform`, `contain`, or `perspective` are a mandatory overlay-positioning regression case.
+
 Use reference-site styling for the three slots' visual treatment and responsive placement, but never reproduce Webless runtime markup or add `data-storefront-auth-open`, `data-storefront-auth-modal`, `data-storefront-cart-root`, or `data-cart-trigger`; Webless decides visibility and injects behavior. A minimal valid navbar region is:
 
 ```html

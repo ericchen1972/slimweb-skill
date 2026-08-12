@@ -22,6 +22,8 @@ The agent must not create a desktop-only layout.
 - Tables should become cards, simplified columns, or controlled horizontal scroll on mobile.
 - Forms must preserve visible labels, clear errors, and mobile input types.
 - Navigation must define mobile menu behavior, cart/login placement, and icon treatment.
+- Navigation acceptance includes 1536px and 1800px because SlimWeb's full desktop menu starts at 2xl; verify top-level links remain on one row and measure navbar height.
+- Open login, mobile-menu, and cart overlays. Their bounding rectangles must remain within the viewport even when the navbar uses `backdrop-filter`, `filter`, `transform`, `contain`, or `perspective`.
 - Floating actions must define fixed-edge spacing, safe-area behavior, stacking order, and non-overlapping touch targets on mobile.
 
 ## Visual Safety Checks
