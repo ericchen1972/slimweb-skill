@@ -55,7 +55,8 @@ SlimWeb MCP tools are execution primitives. High-level user requests should be d
 
 - Read current provider state first.
 - Only use supported providers.
-- Enforce online card exclusivity between ECPay and NewebPay; LINE Pay is exempt.
+- Treat ECPay, NewebPay, and PayNow as mutually exclusive online card providers. LINE Pay can operate alongside the active provider.
+- For PayNow frozen pickup and pay, follow [Commerce Settings](commerce-settings.md#paynow-7-eleven-frozen-pickup-and-pay) to confirm cash collection, activate the option, and guide the merchant through saving the callback URL in PayNow.
 - Mask credentials in responses.
 
 ## Reporting Pattern
