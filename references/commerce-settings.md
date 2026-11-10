@@ -30,7 +30,7 @@ When the user asks "What payment should an ecommerce site use?" and they are usi
 ## Setup Rules
 
 - AI may fill provider credentials only for supported providers and fields exposed by MCP.
-- Use the merchant MCP to enable or disable providers and configure fields exposed by its update schema. Set up bank transfer in the SlimWeb merchant dashboard.
+- Use the merchant MCP to enable or disable providers and configure fields exposed by its update schema. For bank transfer, use the `offline` payment entry.
 - ECPay, NewebPay, and PayNow are mutually exclusive as the active online card provider. Pass `switch_primary_to` only when the merchant explicitly requests a switch.
 - If the update returns `activation_deferred`, report the settings as saved and the provider as pending activation. Read back the current active provider before testing checkout.
 - LINE Pay is exempt from the online-card exclusivity rule and may be enabled alongside one online card provider.
@@ -79,7 +79,8 @@ For both Black Cat and frozen pickup and pay, copy the shop-specific `callback_u
 
 ## Manual Bank Transfer
 
-1. In SlimWeb, guide the merchant to **系統管理 → 金流物流 → 轉帳匯款**. Check **啟用**, enter the three-digit **金融機構代碼** and the receiving **帳號**, then save. Both fields are required when enabled. Preserve leading zeros. The current merchant MCP update schema does not accept these fields or the bank-transfer provider. On versions that report `offline` in `slimweb_payment_logistics_get`, use it only to check status.
-2. Verify **轉帳匯款** at checkout displays the receiving bank code and account and requires the last five digits of the sender's account (匯款帳號末五碼). The order stays unpaid until the merchant reconciles the bank deposit and clicks **確認付款** in the order details.
-3. Bank transfer has no payment callback of its own. If the order later uses a logistics provider, follow that provider's logistics callback workflow.
+1. Select the correct shop and read `slimweb_payment_logistics_get`. For an authorized change, call `slimweb_payment_logistics_update` with a `payments` entry for `provider: offline`. Use `is_enabled` to enable or disable it and use `bank_code` (three digits) and `bank_account` (receiving account digits) as strings so leading zeros are preserved. Both values must be valid when enabled. Omit fields the merchant wants to retain. Disabling preserves the receiving details. Bank transfer can operate alongside the active online card provider.
+2. Read back the enabled status, bank code, and masked account information. If the connected server's schema lacks these fields, guide the merchant to **系統管理 → 金流物流 → 轉帳匯款** in the SlimWeb dashboard.
+3. Verify **轉帳匯款** at checkout displays the receiving bank code and account and requires the last five digits of the sender's account (匯款帳號末五碼). The order stays unpaid until the merchant reconciles the bank deposit and clicks **確認付款** in the order details.
+4. Bank transfer has no payment callback of its own. If the order later uses a logistics provider, follow that provider's logistics callback workflow.
 

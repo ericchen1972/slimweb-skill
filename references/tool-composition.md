@@ -56,7 +56,7 @@ SlimWeb MCP tools are execution primitives. High-level user requests should be d
 - Read current provider state first.
 - Only use supported providers.
 - Treat ECPay, NewebPay, and PayNow as mutually exclusive online card providers. LINE Pay can operate alongside the active provider.
-- Follow [Commerce Settings](commerce-settings.md) for the provider-specific activation and callback steps. Use the SlimWeb merchant dashboard for bank transfer setup and payment confirmation.
+- Follow [Commerce Settings](commerce-settings.md) for provider-specific activation, callback setup, and bank-transfer settings. The merchant confirms a reconciled bank transfer in the SlimWeb order details.
 - Mask credentials in responses.
 
 ## Reporting Pattern
