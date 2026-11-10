@@ -11,7 +11,7 @@ Use this guide to help merchants build a SlimWeb ecommerce site from zero to lau
 
 For any Theme, product-category, or ordinary-navigation change, load [Tool Composition](references/tool-composition.md) and follow its exact inspect, write, and verification tool order before executing the mutation.
 
-For payment or logistics setup, including PayNow 7-ELEVEN frozen pickup and pay (7‑ELEVEN 冷凍取貨付款), load [Commerce Settings](references/commerce-settings.md). Guide the merchant through confirming PayNow cash collection, enabling the option through the merchant MCP, and saving the logistics callback URL in PayNow.
+For payment or logistics setup, load [Commerce Settings](references/commerce-settings.md). It covers PayNow Black Cat three-temperature home delivery (黑貓宅配), PayNow 7-ELEVEN frozen pickup and pay (冷凍取貨付款), ECPay 7-ELEVEN frozen store pickup (綠界冷凍店取), and manual bank transfer (轉帳匯款). Follow each workflow's merchant MCP, dashboard, and callback steps.
 
 For LINE Bot setup or troubleshooting, load [LINE Bot setup](references/line-bot-setup.md). First establish whether the merchant has a LINE Official Account, then guide them from their first unfinished step through webhook verification.
 
