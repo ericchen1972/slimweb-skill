@@ -13,6 +13,8 @@ For any Theme, product-category, or ordinary-navigation change, load [Tool Compo
 
 For payment or logistics setup, including PayNow 7-ELEVEN frozen pickup and pay (7‑ELEVEN 冷凍取貨付款), load [Commerce Settings](references/commerce-settings.md). Guide the merchant through confirming PayNow cash collection, enabling the option through the merchant MCP, and saving the logistics callback URL in PayNow.
 
+For LINE Bot setup or troubleshooting, load [LINE Bot setup](references/line-bot-setup.md). First establish whether the merchant has a LINE Official Account, then guide them from their first unfinished step through webhook verification.
+
 ## Start With Current Progress
 
 When the user asks where to start, says they are new, or asks what is still missing, use the MCP launch progress tool:
