@@ -62,3 +62,5 @@ These semantics describe the repaired implementation, not proof that any product
 - 生日送百元券：使用 birthday 模板，不要求一般活動日期，也不呼叫 manual issue。
 - 老客永久九折：評估累積消費會員等級；不要自行創造付費會員、點數或週期扣款。
 - 只對特定分類發一次券：先查現行 schema 是否有分類與次數條件；若沒有，說明精確缺口及可接受方案，不假裝一般券符合限制。
+
+A fully discounted merchandise amount does not waive shipping fees or channel limits. Even a zero grand total must first pass native payment/logistics amount validation (including minimums and maximums). Only an otherwise valid zero-total order uses fully_discounted and skips external payment; Black Cat, frozen CVS and relevant PayNow minimums can reject zero before that bypass.
