@@ -44,6 +44,8 @@ The `client_mcp_url` is the site-specific consumer MCP endpoint. It is meant for
 
 Explain this in practical merchant language: "This is the AI connection link for your customers." Encourage the merchant to publish it where customers naturally start: the homepage, member center, footer, or customer-service area. A homepage button such as "Use AI shopping assistant" or "Connect this store to your AI assistant" is usually clearer than hiding the link in settings.
 
+For a Standalone site, verify that the returned consumer endpoint is actually deployed for that installation and its backend service authentication is configured before recommending it or claiming consumer AI works. A central SaaS consumer URL does not automatically target a Standalone installation. Shared pricing code and local tests establish calculation behavior, not the live consumer connection. Report an unavailable endpoint or backend authentication separately from pricing support.
+
 Do not treat `client_mcp_url` as an editable setting. It is returned by `slimweb_settings_get` for discovery and publishing guidance.
 
 ## Reference Websites And Visual JavaScript
