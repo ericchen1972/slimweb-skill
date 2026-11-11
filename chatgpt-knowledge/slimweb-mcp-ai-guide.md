@@ -177,7 +177,7 @@ Existing bindings are not overwritten. If an already-linked user requests linkin
 | 折扣碼 | discount_codes：結帳輸入代碼取得比例折抵、來源平台與使用成效 | 不憑空加入日期、分類限定、次數或首購欄位；以當前 schema 為準；平台欄位不代表已投放廣告 |
 | 會員與會員等級 | members list/get、member_tiers：會員查詢、消費紀錄、累積消費門檻與等級折抵 | 累積消費不是當筆門檻；確認升級時點與折抵單位；編輯時帶回既有完整 min_spend／discount_percent（省略會套 0／1.0 預設，不是保留）；不推論有點數、儲值或付費訂閱引擎 |
 | 加購商品／單品加購 | product_add_ons list/upsert：買 A 可以優惠價加購 B，設定 max_quantity、排序、啟停 | A、B 必須不同且都是非服務商品；加購價可為 0，但必須低於 B 目前單買有效價。商品層級關聯，不是規格專屬、全站任選或自動送贈品；加購仍需選取且受主商品、庫存與上限限制 |
-| 滿額贈禮／滿額禮 | threshold_gifts list/upsert：達金額門檻送指定商品，設定門檻、排序與啟停 | 贈品需本站 is_service=true 的服務商品；不擅自轉換現有實體商品。依商品小計扣數量優惠後、會員等級折抵前且不含運費的金額，選最高符合門檻的一份，寫入零元訂單品項；不累贈、不按件數、不當成實體贈品庫存管理 |
+| 滿額贈禮／滿額禮 | threshold_gifts list/upsert：達金額門檻送指定商品，設定門檻、排序與啟停 | 贈品需本站 is_service=true 的服務商品；不擅自轉換現有實體商品。依商品小計扣除數量優惠、會員等級、優惠券及折扣碼後且不含運費的金額，選最高符合門檻的一份，寫入零元訂單品項；不累贈、不按件數、不當成實體贈品庫存管理 |
 | 付款與物流 | payment_logistics get/update：ECPay、NewebPay、PayNow、LINE Pay、轉帳匯款；綠界／藍新／PayNow／HCT 物流 | 以 get 回傳的支援通路與訂單 available_actions 為準；常溫、冷藏、冷凍、取貨或取貨付款各別確認。主線上金流切換需明確要求；activation_deferred 是儲存待啟用 |
 | 運費與滿額免運 | Web Admin 的運費設定：國內／海外費用與各自免運門檻 | 網站已有，盤點的 Merchant MCP 沒有運費寫入欄位；不要發明 shipping 工具或塞進 settings_update。免運門檻基準同為商品小計扣數量優惠後、會員等級折抵前且不含運費；門檻 0 不是自動免運，零運費與正數免運門檻含義不同 |
 | 購物車、結帳與會員購買 | 原生 storefront；consumer MCP／LINE 提供各自授權的查商品、購物車及訂單流程 | Merchant MCP 管店，不冒充消費者下單。前台重驗價格、規格、庫存、限購及促銷，歷史訂單保留快照；LINE 加車不等於建立或付款訂單 |
@@ -253,9 +253,15 @@ Existing bindings are not overwritten. If an already-linked user requests linkin
 - 買四送一可先評估五件八折的價格方案，但不自動加贈品、不保證六件或混購等價；須說明規格模式及單行門檻限制。
 - 加購商品是依附主商品的可選購買；滿額贈禮是金額達標的零元贈品快照；兩者皆不是完整跨商品任選／循環贈品引擎。
 
-## 已觀察到的實作差異，不可當作已驗證可用
+## 結帳疊加與部署差異
 
-本次本機 SaaS StorefrontController 的下單主流程只以數量優惠與會員等級計算商品折抵，建立訂單時 coupon_discount_amount 與 discount_code_amount 固定為 0。優惠券／折扣碼的管理工具及購物車呈現仍存在，但不能僅憑建立成功或購物車顯示就承諾實際下單會套用；遇到這類活動應先確認目標部署的完整結帳結果，必要時回報實作缺口。本次只更新能力指引，沒有改動結帳程式，也沒有用真實訂單驗證正式站或推定所有 Standalone 版本相同。
+修復後的結帳由伺服器依本站、目前登入會員與資料庫現況重新核對，不採信購物車傳入的折抵金額。商品折抵順序為：數量優惠 → 會員等級 → 已發放優惠券固定金額 → 折扣碼對剩餘商品金額按比例折抵。優惠券最低消費以數量優惠及會員等級折抵後、優惠券及折扣碼折抵前且不含運費的商品金額判斷；券額不超過該金額，折扣碼折抵四捨五入為整數並不超過餘額，商品應付最低為零。代碼去除頭尾空白、在本站不分大小寫比對，不推論 schema 沒有的日期或次數限制。
+
+兌換須為本站、目前會員的 issued 券，符合已發放券 starts_at／expires_at，且沒有 used_at、used_order_id、revoked_at；目前模板須存在且固定折抵額大於零。以已發放券效期為準，修改模板不會取代已發放券的到期日。失效或未達門檻會拒絕下單，不能以購物車顯示代替驗證。券與 used_order_id 在同一訂單交易內標記使用；建單失敗一起回滾。同一提交重送回原訂單，付款重試也沿用原訂單，不再次兌券。
+
+滿額贈禮改以四種折抵後、不含運費的商品應付金額判斷，只取最高符合門檻的一份服務商品贈品。運費／免運仍以數量優惠後、會員等級／券／碼前的商品金額計算。總額零元的訂單以 fully_discounted 記為已付款，不呼叫外部金流；正數金額仍受各金流／通路最低金額限制。
+
+以上描述修復後實作，不代表正式站已部署或交易驗收成功。舊 SaaS／Standalone 部署可能不同；承諾活動前須確認目標版本與結帳結果。工具設定成功及購物車呈現都不是最終訂單折抵的證據，也不為測試提案擅自建立真實交易。
 
 ## 維護與證據
 
@@ -431,7 +437,7 @@ Use for any sale, gift, bundle, member offer, free shipping, campaign page, post
 | More units at a lower price | slimweb_products_list/get → slimweb_products_upsert.quantity_discounts | variant_mode=different_price; one cart line; highest quantity threshold; whole-line percentage discount, not recurring free units or cross-product mix |
 | A temporary product price | slimweb_products_get → slimweb_products_upsert.sale_price / sale_ends_at | Preserve variants and existing arrays; variant prices may govern the actual selling price |
 | Buy A, add B at a lower price | slimweb_product_add_ons_list → slimweb_product_add_ons_upsert | Different non-service products; price below B's current standalone price, max_quantity and stock; optional selection, not automatically gifted |
-| Spend an amount, receive a gift | slimweb_threshold_gifts_list → slimweb_threshold_gifts_upsert | Same-site service product; item subtotal after quantity discounts, before member-tier reduction and excluding shipping; highest qualifying tier only, not cumulative or quantity-triggered |
+| Spend an amount, receive a gift | slimweb_threshold_gifts_list → slimweb_threshold_gifts_upsert | Same-site service product; merchandise subtotal after quantity, member-tier, coupon and code discounts, excluding shipping; highest qualifying tier only, not cumulative or quantity-triggered |
 | Give a fixed-value coupon | slimweb_coupon_templates_list → slimweb_coupon_templates_upsert | manual/all_members/order_threshold/birthday/product_bundle; amount, minimum spend and trigger-specific rules; only manual uses slimweb_members_coupons_issue |
 | Product purchase gives a coupon | coupon template product_bundle + slimweb_products_get/upsert.gift_coupon_template_id | Coupon assignment and product update are separate; not a fixed-price product bundle |
 | Code entered at checkout | slimweb_discount_codes_list → slimweb_discount_codes_upsert | Code, fraction deducted, platform; no assumed date/scope/usage/first-purchase restrictions absent from schema |
@@ -449,9 +455,19 @@ Quantity discount percent is an integer reduction (20 = 20% off). Code/tier disc
 4. For a combination, explain differences and let the merchant accept them. Do not create a new SKU, change variants, convert physical products into service items or repurpose coupons without agreement.
 5. Before product upsert, read the full product and preserve existing variants, quantity_discounts and videos in accepted write shapes (videos are URL strings). These arrays are rebuilt; omission is not preservation. Avoid unrelated destructive changes and re-read after writing.
 6. Check threshold-minus-one, threshold, threshold-plus-one, repeated groups, mixed products/variants and stacking. Five items at 20% off can match buy-four-get-one at five items, but six items differ. Use calculations/previews without creating real orders.
-7. Coupon/code management exists, but the audited local SaaS order-creation path stores coupon/code discount amounts as zero. Verify the target deployment checkout before promising redemption; a cart display or successful template write is insufficient. Do not generalize this observation to every deployment.
+7. Use the checkout semantics below when planning stacking. Verify the target deployment includes this checkout repair before promising redemption; older SaaS/Standalone deployments may differ. A cart display or successful template write is insufficient evidence of final-order behavior.
 8. Apply the authorized rule through its current tool, then read back. Follow any tool-specific human confirmation, provider and publication requirements.
 9. Create only requested campaign materials. State separately which checkout rules were saved/enabled, which content was published, and which sends/transactions remain unverified.
+
+## Checkout amounts and issued coupons
+
+In the repaired checkout, the server re-reads current site/member data when creating the order; cart selections are identifiers, not trusted discount amounts. The order is: quantity discount → member-tier reduction → fixed-value issued coupon → proportional discount code on the remaining merchandise amount. The coupon minimum is checked after quantity/member-tier discounts, before coupon/code discounts, excluding shipping. Coupon deductions are capped at that subtotal; code deductions are rounded to whole currency units and capped at the remainder, so merchandise totals cannot become negative. Codes are trimmed and matched case-insensitively within the current site; do not invent date, scope or usage constraints absent from the schema.
+
+A coupon must belong to the current site and signed-in member, have status issued, be within its issued starts_at/expires_at dates, and have no used_at, used_order_id or revoked_at. The current template must exist and have a positive fixed discount. Issued coupon validity governs redemption; changing a template does not replace an issued coupon expiry. The server rejects invalid or below-minimum selections instead of silently accepting the cart display. Coupon consumption and used_order_id are saved in the order transaction; an order failure rolls both back. Replaying the same submission returns the same order, and payment retry reuses that order rather than redeeming again.
+
+Gift eligibility uses merchandise remaining after all four discounts, excluding shipping. Only the highest qualifying tier supplies one same-site service-product gift. Shipping/free-shipping calculation remains based on merchandise after quantity discounts, before member-tier/coupon/code discounts. Zero-total orders are recorded as fully discounted and paid without an external payment request; positive totals retain each provider/channel minimum restriction.
+
+These semantics describe the repaired implementation, not proof that any production site has been updated or that a provider accepted payment. Check the target deployment/version and authorized checkout validation separately; do not create real transactions merely to validate a proposal.
 
 ## Campaign materials and communications
 
