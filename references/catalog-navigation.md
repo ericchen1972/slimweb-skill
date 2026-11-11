@@ -2,6 +2,8 @@
 
 Use this when the user asks for product publishing, product edits, product images, batch import, category structure, navigation menus, icons, product landing paths, or catalog cleanup.
 
+For quantity discounts, add-on products, threshold gifts or business-language requests, consult [Capability Map](capability-map.md) and [Marketing Campaigns](marketing-campaigns.md). Before product updates, read the full product and preserve existing variants, quantity_discounts and videos using accepted write shapes (videos are URL strings); these arrays are rebuilt and omission can clear them. Quantity discounts currently require variant_mode=different_price and apply per cart line, not pooled across variants.
+
 ## Available Tool Families
 
 - Products: `slimweb_products_list`, `slimweb_products_get`, `slimweb_products_upsert`, `slimweb_products_delete`.

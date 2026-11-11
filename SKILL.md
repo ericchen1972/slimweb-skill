@@ -15,6 +15,18 @@ For payment or logistics setup, load [Commerce Settings](references/commerce-set
 
 For LINE Bot setup or troubleshooting, load [LINE Bot setup](references/line-bot-setup.md). First establish whether the merchant has a LINE Official Account, then guide them from their first unfinished step through webhook verification.
 
+## Match Merchant Intent Before Answering
+
+For feature questions, business goals, promotion requests, or any possible “SlimWeb cannot do this” answer, first consult the relevant rows of [Capability Map and Merchant Language](references/capability-map.md). It covers the complete tool inventory, native features, combinations, Web-only settings, prerequisites and limits; load only the relevant sections.
+
+Translate merchant language into candidate capabilities before searching tool names. In particular, 多買優惠／買四送一 → quantity_discounts; 加購商品／加價購 → product_add_ons; 滿額贈禮／滿額禮 → threshold_gifts; 生日／消費送券 → coupon issue_trigger; 老客九折 → member_tiers. These are candidates, not promises of identical mechanics.
+
+Before declaring a request unsupported: inspect current tools/list and schemas, read the site's relevant list/get state, compare native and composed options, check calculation/scope/activation limits, and explain any difference. Distinguish native support, composed alternative, setup required, Web-only/current-connection unavailable, unverified, and an unsupported exact rule. Missing tools or credentials do not establish platform-wide absence. Respect each tool's existing confirmation and site-selection rules.
+
+For promotions, load [Marketing Campaigns](references/marketing-campaigns.md). Do not default every campaign to coupons. Quantity tiers, product sale prices, add-ons, threshold gifts, member tiers, coupons, codes and shipping rules solve different needs. Check boundary quantities, variants, stacking and percent units before recommending or writing. Content-only campaigns do not enable checkout rules.
+
+Quick routes: catalog/import → [Catalog](references/catalog-navigation.md); payments/logistics → [Commerce](references/commerce-settings.md); LINE setup → [LINE](references/line-bot-setup.md). For orders, returns/refunds, invoices, email/newsletters, LINE menus/push, reporting/exports, AI setup and Web-only capabilities use the matching capability-map rows and current tool schemas.
+
 ## Start With Current Progress
 
 When the user asks where to start, says they are new, or asks what is still missing, use the MCP launch progress tool:
@@ -84,7 +96,7 @@ These are useful once the store has products and basic operations:
 
 - Member tiers and loyalty design.
 - Newsletter campaigns.
-- Add-on products, threshold gifts, bundles, and seasonal promotions.
+- Quantity discounts, add-on products, threshold gifts, member-tier offers, product-linked coupons, and seasonal promotions; verify exact bundle mechanics before promising them.
 - Campaign posters, product visuals, and social media materials.
 - Analytics review and conversion optimization.
 
@@ -112,7 +124,7 @@ The AI can help the user:
 - Create and edit homepage, landing pages, brand pages, policy pages, and articles.
 - Design or refine themes, visual direction, color usage, navbar, floating actions, footer, root CSS, and page atmosphere.
 - Prepare SEO / AEO / GEO metadata from real business and content context.
-- Set up or improve coupons, discount codes, newsletters, email templates, and promotional content.
+- Match merchant goals to quantity discounts, add-on products, threshold gifts, member tiers, coupons, discount codes, email/newsletter tools, and campaign content using the capability map.
 - Explain what still blocks launch and what can wait until later.
 
 ## Conversation Style

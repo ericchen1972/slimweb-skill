@@ -53,3 +53,18 @@ Codex will use `SKILL.md` when the task matches SlimWeb MCP operations.
 ## Maintenance Rule
 
 When SlimWeb MCP adds or removes tools, update this pack at the workflow level. Keep single-tool schema details in the MCP repo; keep multi-tool task guidance here.
+
+## Capability discovery and maintenance
+
+`references/capability-map.md` is the maintained capability map, merchant-language routing, pre-refusal checklist and full Merchant MCP tool index. `references/marketing-campaigns.md` describes promotion composition, including quantity discounts, add-on products and threshold gifts. Current tools/list, schemas, site permissions and deployment readiness remain authoritative.
+
+The ChatGPT Knowledge file and embedded website Skill include these references inline so uploaded/downloaded copies are self-contained. The shared MCP Core packages the same capability map as `src/merchant-capabilities.md`, exposes it at `slimweb://guides/merchant-capabilities`, and includes compact discovery rules in initialize, server/discover and service instructions.
+
+After editing the canonical references, run (pass only consumer directories available on your machine):
+
+```sh
+node scripts/sync-capability-guide.mjs --core-root ../SlimWeb-MCP-Core --webless-root ../webless --standalone-root ../SlimWeb-Standalone --installed-root ~/.codex/skills/slimweb-mcp
+node scripts/sync-capability-guide.mjs --check --core-root ../SlimWeb-MCP-Core --webless-root ../webless --standalone-root ../SlimWeb-Standalone --installed-root ~/.codex/skills/slimweb-mcp
+```
+
+Keep the complete index aligned with Core tools/list and run Core protocol tests plus merchant scenarios. Source synchronization does not publish GitHub updates or deploy running MCP services; consumers pinned to a Core release need an updated release/deployment to serve the new handshake instructions.
