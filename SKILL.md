@@ -5,6 +5,18 @@ description: Use when guiding a user through planning, building, launching, or i
 
 # SlimWeb Ecommerce Build Guide
 
+## Tailwind-first Responsive Safety Contract
+
+Use Tailwind mobile-first responsive utilities for structural layout. Do not use absolute or fixed positioning, negative margins, or translate transforms for primary layout. Do not use broad or unscoped :has() selectors. Do not change html, body, the storefront root, or main into flex or grid containers. Scope custom CSS to the actual page or Theme fragment classes.
+
+Theme navbar overlays must remain viewport-bound. Check containing-block hazards including transform, filter and backdrop-filter. At 1536 and 1800 CSS pixels, keep ordinary desktop navigation on one row and the header compact. Visible text actions need explicit horizontal and vertical padding. Icon-only controls need an approximately 44px by 44px hit target. Use the SlimWeb-provided scroll-to-top runtime control.
+
+Verify widths 320, 375, 430, 768, 1024, 1440, 1536, and 1800. The document scrollWidth must not exceed clientWidth. Responsive spacing is a usability requirement. Every section needs intentional horizontal gutters and vertical separation. Use Tailwind mobile-first gap, space, padding, and margin utilities. Do not create structural spacing with whitespace characters, repeated <br> elements, or empty spacer elements. Any viewport with missing, collapsed, excessive, or structurally unsafe spacing fails verification.
+
+## Storefront asset delivery
+
+Stored content is static HTML; never submit Blade or PHP. Mark one intended above-the-fold image with `data-storefront-lcp`, provide image dimensions and responsive sources, and let the platform optimize loading. Preserve formal assets at `assets/root-elements/js/*.js` and `pages/{page_key}/assets/js/*.js`; MCP edits own only `pages/{page_key}/assets/js/90-mcp-page.js`. Stored HTML must not depend on inline executable scripts. Use only the managed third-party library allowlist and preserve the platform CSP and runtime slots.
+
 ## Purpose
 
 Use this guide to help merchants build a SlimWeb ecommerce site from zero to launch. This is not the MCP execution manual. MCP server instructions and tool descriptions define exact tool-call rules; this Skill defines how to guide the user, what the AI can help with, and which setup areas matter first.
