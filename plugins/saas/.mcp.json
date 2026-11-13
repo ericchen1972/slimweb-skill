@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "slimweb": {
+      "type": "http",
+      "url": "https://slimweb-mcp-aakwcbp2ca-de.a.run.app/mcp"
+    }
+  }
+}

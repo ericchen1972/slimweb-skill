@@ -4,3 +4,4 @@ dist/
 coverage/
 .worktrees/
 *.log
+__pycache__/

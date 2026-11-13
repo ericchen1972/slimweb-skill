@@ -1,0 +1,10 @@
+{
+  "name": "slimweb-lujiu",
+  "version": "1.0.0",
+  "description": "SlimWeb MCP and complete ecommerce workflow skill",
+  "author": {
+    "name": "SlimWeb"
+  },
+  "homepage": "https://slimweb.tw",
+  "repository": "https://github.com/ericchen1972/slimweb-skill"
+}

@@ -2,6 +2,8 @@
 
 This repository teaches AI agents how to use SlimWeb MCP as a higher-level website and ecommerce operating surface.
 
+**Install MCP + Skill together:** [Unified Plugin installation guide](INSTALL.md). It includes copy-paste AI instructions, SaaS and lujiu packages, a generator for other standalone targets, and the original separate MCP + Skill fallback. These are self-managed plugin packages, not a claim of publication in an official public marketplace.
+
 SlimWeb MCP exposes concrete tools. This pack explains how an AI should combine those tools when a user asks for outcomes such as theme design, page design, marketing campaigns, coupons, discount codes, product publishing, navigation, product categories, external CSS/JS, articles, and media uploads.
 
 ## Who This Is For

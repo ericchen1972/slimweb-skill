@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "slimweb": {
+      "type": "http",
+      "url": "https://slimweb-standalone-mcp-27587628711.asia-east1.run.app/mcp?domain=lujiu.com.tw"
+    }
+  }
+}
