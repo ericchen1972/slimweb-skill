@@ -1,11 +1,21 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "slimweb-saas",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "SlimWeb MCP and complete ecommerce workflow skill",
   "author": {
     "name": "SlimWeb"
   },
   "homepage": "https://slimweb.tw",
-  "repository": "https://github.com/ericchen1972/slimweb-skill"
+  "repository": "https://github.com/ericchen1972/slimweb-skill",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "SlimWeb",
+        "shortDescription": "AI website management",
+        "logo": "./assets/slimweb-logo.png",
+        "composerIcon": "./assets/slimweb-logo.png"
+      }
+    }
+  }
 }

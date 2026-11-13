@@ -53,8 +53,10 @@ def generate(output, name, url, refresh=False):
         skill = staging / 'skills/slimweb-mcp'
         skill.mkdir(parents=True)
         shutil.copyfile(ROOT / 'SKILL.md', skill / 'SKILL.md')
-        metadata = {'name': name, 'version': '1.1.0', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
-        dump(staging / 'plugin.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', **metadata})
+        metadata = {'name': name, 'version': '1.1.1', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
+        shutil.copytree(ROOT / 'assets', staging / 'assets')
+        interface = {'displayName': 'SlimWeb', 'shortDescription': 'AI website management', 'logo': './assets/slimweb-logo.png', 'composerIcon': './assets/slimweb-logo.png'}
+        dump(staging / 'plugin.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', **metadata, 'extensions': {'com.openai': {'interface': interface}}})
         dump(staging / '.claude-plugin/plugin.json', metadata)
         dump(staging / 'mcp.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', 'mcpServers': {'slimweb': {'type': 'streamable-http', 'url': url}}})
         dump(staging / '.mcp.json', {'mcpServers': {'slimweb': {'type': 'http', 'url': url}}})

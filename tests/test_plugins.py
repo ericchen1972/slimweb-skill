@@ -40,7 +40,16 @@ class PluginTests(unittest.TestCase):
         for server in config['mcpServers'].values():
             self.assertEqual(set(server) - {'type', 'url', 'headers'}, set())
             self.assertEqual(server['type'], 'streamable-http')
-        self.assertEqual(json.loads((self.out / 'plugin.json').read_text())['version'], '1.1.0')
+        self.assertEqual(json.loads((self.out / 'plugin.json').read_text())['version'], '1.1.1')
+
+    def test_brand_icons_are_packaged_and_resolve(self):
+        self.module.generate(self.out, 'slimweb-test', self.module.TARGETS['saas'])
+        manifest = json.loads((self.out / 'plugin.json').read_text())
+        interface = manifest['extensions']['com.openai']['interface']
+        for key in ['logo', 'composerIcon']:
+            icon = (self.out / interface[key]).resolve()
+            self.assertTrue(icon.is_relative_to(self.out.resolve()))
+            self.assertEqual(icon.read_bytes(), (ROOT / 'assets/slimweb-logo.png').read_bytes())
 
     def test_exact_custom_url_and_determinism(self):
         url = 'https://merchant.example/mcp?domain=shop.example&tenant=a%2Fb'
