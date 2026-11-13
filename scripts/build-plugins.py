@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build self-contained plugin distributions from the canonical skill sources."""
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -14,6 +15,8 @@ TARGETS = {
     'lujiu': 'https://slimweb-standalone-mcp-27587628711.asia-east1.run.app/mcp?domain=lujiu.com.tw',
 }
 MARKER = '.slimweb-generated.json'
+# Immutable known generated copies from the last full-Skill release.
+LEGACY_REFERENCE_HASHES = json.loads((ROOT / 'scripts/legacy-reference-hashes.json').read_text())['files']
 
 def dump(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -71,8 +74,15 @@ def generate(output, name, url, refresh=False):
                     raise FileExistsError('refusing symlink in obsolete references')
                 for item in obsolete.rglob('*'):
                     source = ROOT / 'references' / item.relative_to(obsolete)
-                    if item.is_symlink() or (item.is_file() and (not source.is_file() or item.read_bytes() != source.read_bytes())):
-                        raise FileExistsError('preserve modified or unknown reference before refreshing: ' + str(item))
+                    if item.is_symlink():
+                        raise FileExistsError('refusing symlink in obsolete references')
+                    if item.is_file():
+                        data = item.read_bytes()
+                        relative = item.relative_to(obsolete).as_posix()
+                        known_legacy = hashlib.sha256(data).hexdigest() in LEGACY_REFERENCE_HASHES.get(relative, [])
+                        current_copy = source.is_file() and data == source.read_bytes()
+                        if not known_legacy and not current_copy:
+                            raise FileExistsError('preserve modified or unknown reference before refreshing: ' + str(item))
                 shutil.rmtree(obsolete)
             shutil.copytree(staging, output, dirs_exist_ok=True)
         else:

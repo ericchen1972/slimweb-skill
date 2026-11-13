@@ -1,4 +1,5 @@
 import importlib.util
+import gzip
 import json
 import tempfile
 import unittest
@@ -82,6 +83,30 @@ class PluginTests(unittest.TestCase):
         (old / source.name).write_bytes(source.read_bytes())
         self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp', refresh=True)
         self.assertFalse(old.exists())
+
+    def test_refresh_accepts_unchanged_previous_release_references(self):
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')
+        old = self.out / 'skills/slimweb-mcp/references'
+        old.mkdir()
+        for source in (ROOT / 'tests/fixtures/full-skill-1.0.1').glob('*.md.gz'):
+            data = gzip.decompress(source.read_bytes())
+            name = source.name[:-3]
+            (old / name).write_bytes(data)
+            self.assertNotEqual(data, (ROOT / 'references' / name).read_bytes())
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp', refresh=True)
+        self.assertFalse(old.exists())
+
+    def test_refresh_rejects_edited_previous_release_reference(self):
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')
+        old = self.out / 'skills/slimweb-mcp/references'
+        old.mkdir()
+        source = ROOT / 'tests/fixtures/full-skill-1.0.1/capability-map.md.gz'
+        user_file = old / 'capability-map.md'
+        edited = gzip.decompress(source.read_bytes()) + b'User customization\n'
+        user_file.write_bytes(edited)
+        with self.assertRaises(FileExistsError):
+            self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp', refresh=True)
+        self.assertEqual(user_file.read_bytes(), edited)
 
     def test_refresh_preserves_modified_obsolete_references(self):
         self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')

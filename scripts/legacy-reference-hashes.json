@@ -1,0 +1,36 @@
+{
+  "release": "full-skill-1.0.1",
+  "source_commit": "ba13976",
+  "files": {
+    "capability-map.md": [
+      "614bc159cdd4204227e84363ed2689b82f8a425c3d6ec4bcc4e42e5eb6e7d9cf"
+    ],
+    "catalog-navigation.md": [
+      "6dfc9996d542658abc4375ecf94b57fcaadf4ce30f212dd63bceaebad75291c6"
+    ],
+    "commerce-settings.md": [
+      "35989385bd33f455a2037776ab4801f1ad80f803d49fc65f3ed45d59032e9022"
+    ],
+    "design-rwd.md": [
+      "238c3481846f9c7e5f629ff9dc73d6152912dfe9a543e2641fe48c352d31bc4b"
+    ],
+    "external-assets.md": [
+      "c82d2f33b89d2f0274b259dcca4677cdff1b7f9b000691cf8fd19039dc667dd9"
+    ],
+    "line-bot-setup.md": [
+      "e07540d64ef575dee63d18f415995446aaaa54ba765fecdc7c6518876768cd24"
+    ],
+    "marketing-campaigns.md": [
+      "ab17cd0d4d2e9913d745395aa6e1ced8482c8ebb33cf28acd2de0171eabc6a95"
+    ],
+    "media-upload-flow.md": [
+      "2a02b861401cf0a10a7e1f26f458da5bfb8258bb69df4460a226514619ea83c1"
+    ],
+    "theme-page-workflows.md": [
+      "ae695f18e086e16dac641ccd4908c539356959e8f86f7746223244166ffef7bd"
+    ],
+    "tool-composition.md": [
+      "5b8d13c5a877c499465c1da705176d92b925b85b5f94b2e987eea6fbe365af6b"
+    ]
+  }
+}
