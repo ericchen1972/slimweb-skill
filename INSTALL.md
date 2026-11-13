@@ -23,7 +23,7 @@ ChatGPT 用戶請進入 Codex 模式，並授予 Codex 完全存取權後，複�
 ## AI 安裝流程
 
 1. 確認宿主（Codex／ChatGPT desktop／ChatGPT web／Claude Code／其他）及目前版本的支援方式。讀取既有設定，依完整 URL 比對連線；同一伺服器名稱可能對應不同網站，不可只憑名稱覆蓋。檢查既有 `slimweb-mcp` Skill 路徑與來源，保留使用者修改；已有 Plugin 就不要再安裝同一份裸 MCP 和 Skill。
-2. 選擇 `mcp.json` 中 URL 與目標完整 URL 完全一致的 Plugin，並從其 marketplace entry 取得安裝名稱。沒有相符套件時使用下方產生器。Plugin 內 `skills/slimweb-mcp/` 包含完整 `SKILL.md` 與全部 `references/`；勿只複製一個入口檔案。
+2. 選擇 `mcp.json` 中 URL 與目標完整 URL 完全一致的 Plugin，並從其 marketplace entry 取得安裝名稱。沒有相符套件時使用下方產生器。Plugin 1.1.0 起只包含精簡的 `skills/slimweb-mcp/SKILL.md` 啟動指南；完整操作文件由已連線 MCP 的 `slimweb_guides_get` 提供，不在 Plugin 另附 `references/`。
 3. 使用宿主實際支援的匯入方式。可安裝本機 Plugin 的 Codex／ChatGPT desktop 使用 `.agents/plugins/marketplace.json`；其中 `source.path` 相對於 marketplace 根目錄。本庫是 repo marketplace，可在可信任的本機 checkout 中使用；其他專案或個人 marketplace 必須調整到實際 Plugin 位置，合併而非覆蓋既有清單。需要時重啟宿主、啟用所選 Plugin。啟用方式依宿主文件與版本確認。
 4. Claude Code 可先使用 `/plugin marketplace add ericchen1972/slimweb-skill`，再從清單選擇已核對完整 URL 的 Plugin。自訂套件可用 `claude --plugin-dir /absolute/path/to/generated-plugin` 進行本機載入；持久安裝使用宿主支援的 marketplace 流程。只安裝符合目標的一個。
 5. ChatGPT web 的能力取決於帳號、工作區及管理員設定。若具有 Plugin GitHub 匯入或管理員流程，使用該流程並選取正確子目錄；若不支援此 repo 的本機 marketplace，改用可用的遠端 MCP／App 設定與 Skill／知識檔案方式，不要把貼上一個網址說成已完成安裝。安裝本機 Skill、上傳 Knowledge 本身不會建立 MCP 連線。
@@ -45,7 +45,7 @@ codex plugin marketplace add ericchen1972/slimweb-skill
 codex plugin add <MATCHED_PLUGIN_NAME>@<MARKETPLACE_NAME> --json
 ```
 
-更新已安裝的舊套件：先檢查版本與完整 URL，使用宿主的 marketplace 更新命令更新對應來源，再以已核對的 selector 重新安裝。確認安裝版本為 **1.0.1 或更新版本**，並重新載入宿主後驗證。不要只改 Plugin cache，否則重新安裝會覆蓋修改。不同目標不得共用或互相覆蓋設定。
+更新已安裝的舊套件：先檢查版本與完整 URL，使用宿主的 marketplace 更新命令更新對應來源，再以已核對的 selector 重新安裝。首次切換此架構時，確認安裝版本為 **1.1.0 或更新版本**，並重新載入宿主後驗證。不要只改 Plugin cache，否則重新安裝會覆蓋修改。不同目標不得共用或互相覆蓋設定。
 
 ### 舊版 1.0.0 相容性與重複設定
 
@@ -75,19 +75,30 @@ claude mcp add --transport http slimweb-target 'https://YOUR-HOST/mcp?domain=YOU
 
 此為佔位範例，不能直接執行；改成網站提供的精確 URL。Codex 等宿主也應使用實際 URL，不要貼入 Claude 的格式。
 
-將根目錄的 [SKILL.md](SKILL.md) 與完整 [references/](references/) 一起複製到宿主的 Skill 目錄；例如 Codex 的 `~/.agents/skills/slimweb-mcp/`（舊版本可能使用 `~/.codex/skills/`）。先檢查已有版本，避免兩處重複載入。支援 Knowledge 的宿主可使用 [chatgpt-knowledge/slimweb-mcp-ai-guide.md](chatgpt-knowledge/slimweb-mcp-ai-guide.md)，並依宿主支援加入參考檔。知識上傳與 MCP 授權是各自必須完成的步驟。
+分開安裝時，只將根目錄的精簡 [SKILL.md](SKILL.md) 放入宿主的 `slimweb-mcp/` Skill 目錄；例如 Codex 的 `~/.agents/skills/slimweb-mcp/`（舊版本可能使用 `~/.codex/skills/`）。先檢查已有版本，避免兩處重複載入；保留使用者修改與檔案，不把舊 references 當作連線失敗時的替代操作指南。Skill 安裝與 MCP 授權是各自必須完成的步驟。
+
+## 精簡 Plugin 與即時指南
+
+從舊版完整 Skill 升到 **1.1.0** 需要更新一次 Plugin。之後每個新 SlimWeb 任務先呼叫 `slimweb_guides_get`（`topic: index`），依回傳的 `guide_version` 讀取 `overview` 與相關主題。日常操作文件更新由 MCP 服務部署後提供，不必為每次文件修改重裝 Plugin；本機 bootstrap 本身若變更仍需正常更新套件。
+
+這不是自動升級 AI Client、Plugin binary 或執行更新腳本。MCP 新增工具後，部分宿主需要重新整理工具清單、重新連線或重啟。指南工具不存在、授權失敗或必要指南讀取失敗時，AI 應停止網站寫入，說明原因並在連線修復後重試；不能改用舊本機文件或猜測工具。
+
+指南只有通用文件，不授予網站操作權限；登入、選站、目前工具 schema 與人工確認仍是執行邊界。
 
 ## 維護與其他獨立版產生器
 
-根目錄 `SKILL.md` 與 `references/` 是唯一維護來源；`plugins/` 是可重建的發佈副本，不直接修改。
+根目錄 `SKILL.md` 是精簡 bootstrap 的唯一來源；`guides/overview.md` 與 `references/*.md` 是服務端操作文件的正式來源。`plugins/` 是可重建的發佈副本，不直接修改。
 
 ```sh
 python3 -m unittest discover -s tests -v
 python3 scripts/build-plugins.py --refresh-generated
+python3 scripts/export-guides.py --output /absolute/path/to/new-guide-export
 python3 scripts/build-plugins.py --name slimweb-target --url 'https://YOUR-HOST/mcp?domain=YOUR-DOMAIN' --output /absolute/path/to/new-plugin
 ```
 
-自訂指令必須提供 `--name`、`--url` 和 `--output`，不會預設端點。首次輸出要求不存在的目錄；`--refresh-generated` 只更新由本產生器建立、名稱與 URL 完全一致的目錄，保留額外使用者檔案，拒絕覆寫不相關資料夾。不要將輸出指向來源 repo 或既有安裝目錄。更新後重新安裝／同步，並依宿主要求重新載入。
+上面的路徑與 `YOUR-HOST`／`YOUR-DOMAIN` 是佔位範例，必須替換後使用。指南匯出要求明確、尚不存在的輸出目錄，僅匯出正式 Markdown 與決定性的 `manifest.json`（版本由內容雜湊產生），不讀取憑證或其他本機檔案。將匯出結果發佈到 MCP 服務後才會更新已連線客戶端可讀的指南。
+
+自訂指令必須提供 `--name`、`--url` 和 `--output`，不會預設端點。首次輸出要求不存在的目錄；`--refresh-generated` 只更新由本產生器建立、名稱與 URL 完全一致的目錄，保留額外使用者檔案，拒絕覆寫不相關資料夾。更新到精簡版本會移除未修改的舊 generated references；若該目錄有使用者修改、未知檔案或 symlink 則拒絕更新，先保留並人工處理。不要將輸出指向來源 repo 或既有安裝目錄。更新後重新安裝／同步，並依宿主要求重新載入。
 
 ## 格式與目前驗證範圍
 
@@ -95,7 +106,7 @@ python3 scripts/build-plugins.py --name slimweb-target --url 'https://YOUR-HOST/
 - `.claude-plugin/plugin.json` 及 `.mcp.json` 提供 Claude 相容格式，HTTP transport 為 `http`，由宿主管理 OAuth。
 - `.agents/plugins/marketplace.json` 和 `.claude-plugin/marketplace.json` 為各宿主不同格式的自管清單，不代表公開市集審核或上架。
 - 1.0.1 修正 Codex 已實際回報的 `extensions` 解析錯誤；不因文件列出某個 extension 就假設每個宿主版本都能解析。自動測試限制可攜 HTTP server 的欄位，避免再次產生此不相容設定。
-- 自動化測試涵蓋 URL 保留、無效輸入拒絕、資料夾保護、完整參考檔複製與可重建一致性。這不等同每個宿主已完成真實 Google 授權；最終以該宿主實際連線及 `slimweb_sites_list` 成功為準。
+- 自動化測試涵蓋 URL 保留、無效輸入拒絕、資料夾保護、精簡 Skill、舊產物遷移保護、指南匯出雜湊與可重建一致性。這不等同每個宿主已完成真實 Google 授權；最終以該宿主實際連線及 `slimweb_sites_list` 成功為準。
 - 2026-11-14：Codex 0.167.0-alpha.4.1 的 Plugin 1.0.1 已完成真實 Google 授權；移除同 URL 的裸 MCP 後，原生 app-server 確認 MCP 來自已安裝 Plugin、工具載入無錯誤，且唯讀 `slimweb_sites_list` 呼叫成功。此為已測試宿主與目標的結果；其他環境仍須個別驗證。公開安裝文件不記錄使用者帳號、網站名稱或網站清單。
 
 官方格式參考：[OpenAI Plugin 包裝](https://developers.openai.com/plugins/build/plugins)、[Agent Plugins Manifest Schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json)、[MCP Schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json)、[Claude Plugin reference](https://code.claude.com/docs/en/plugins-reference)。

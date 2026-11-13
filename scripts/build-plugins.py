@@ -50,8 +50,7 @@ def generate(output, name, url, refresh=False):
         skill = staging / 'skills/slimweb-mcp'
         skill.mkdir(parents=True)
         shutil.copyfile(ROOT / 'SKILL.md', skill / 'SKILL.md')
-        shutil.copytree(ROOT / 'references', skill / 'references')
-        metadata = {'name': name, 'version': '1.0.1', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
+        metadata = {'name': name, 'version': '1.1.0', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
         dump(staging / 'plugin.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', **metadata})
         dump(staging / '.claude-plugin/plugin.json', metadata)
         dump(staging / 'mcp.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', 'mcpServers': {'slimweb': {'type': 'streamable-http', 'url': url}}})
@@ -64,6 +63,17 @@ def generate(output, name, url, refresh=False):
                     dest = output / item.relative_to(staging)
                     if dest.is_symlink() or any(p.is_symlink() for p in dest.parents if p.is_relative_to(output)):
                         raise FileExistsError('refusing symlink in output')
+            # Full-skill distributions used this generated path before 1.1.0.
+            # Remove only unchanged canonical copies; refuse to discard user edits.
+            obsolete = output / 'skills/slimweb-mcp/references'
+            if obsolete.exists() or obsolete.is_symlink():
+                if obsolete.is_symlink():
+                    raise FileExistsError('refusing symlink in obsolete references')
+                for item in obsolete.rglob('*'):
+                    source = ROOT / 'references' / item.relative_to(obsolete)
+                    if item.is_symlink() or (item.is_file() and (not source.is_file() or item.read_bytes() != source.read_bytes())):
+                        raise FileExistsError('preserve modified or unknown reference before refreshing: ' + str(item))
+                shutil.rmtree(obsolete)
             shutil.copytree(staging, output, dirs_exist_ok=True)
         else:
             staging.rename(output)

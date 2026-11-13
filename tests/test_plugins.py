@@ -17,7 +17,7 @@ class PluginTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.out = Path(self.temp.name) / 'plugin'
 
-    def test_targets_manifests_and_complete_skill(self):
+    def test_targets_manifests_and_thin_skill(self):
         for target, url in self.module.TARGETS.items():
             out = self.out / target
             self.module.generate(out, 'slimweb-' + target, url)
@@ -28,9 +28,9 @@ class PluginTests(unittest.TestCase):
             self.assertEqual(json.loads((out / '.mcp.json').read_text())['mcpServers']['slimweb'], {'type':'http','url':url})
             self.assertEqual(json.loads((out / 'plugin.json').read_text())['name'], 'slimweb-' + target)
             self.assertEqual((out / 'skills/slimweb-mcp/SKILL.md').read_bytes(), (ROOT / 'SKILL.md').read_bytes())
-            for source in (ROOT / 'references').rglob('*'):
-                if source.is_file():
-                    self.assertEqual((out / 'skills/slimweb-mcp/references' / source.relative_to(ROOT / 'references')).read_bytes(), source.read_bytes())
+            self.assertFalse((out / 'skills/slimweb-mcp/references').exists())
+            self.assertEqual([p.name for p in (out / 'skills/slimweb-mcp').iterdir()], ['SKILL.md'])
+            self.assertLess(len((out / 'skills/slimweb-mcp/SKILL.md').read_text().split()), 400)
 
     def test_codex_portable_http_server_has_only_supported_fields(self):
         # Codex 0.167 rejects unknown fields such as extensions before OAuth starts.
@@ -39,7 +39,7 @@ class PluginTests(unittest.TestCase):
         for server in config['mcpServers'].values():
             self.assertEqual(set(server) - {'type', 'url', 'headers'}, set())
             self.assertEqual(server['type'], 'streamable-http')
-        self.assertEqual(json.loads((self.out / 'plugin.json').read_text())['version'], '1.0.1')
+        self.assertEqual(json.loads((self.out / 'plugin.json').read_text())['version'], '1.1.0')
 
     def test_exact_custom_url_and_determinism(self):
         url = 'https://merchant.example/mcp?domain=shop.example&tenant=a%2Fb'
@@ -73,6 +73,25 @@ class PluginTests(unittest.TestCase):
         self.assertEqual(extra.read_text(), 'preserve')
         with self.assertRaises(FileExistsError):
             self.module.generate(self.out, 'slimweb-test', 'https://other.example/mcp', refresh=True)
+
+    def test_refresh_removes_obsolete_generated_references(self):
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')
+        old = self.out / 'skills/slimweb-mcp/references'
+        old.mkdir(exist_ok=True)
+        source = next((ROOT / 'references').glob('*.md'))
+        (old / source.name).write_bytes(source.read_bytes())
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp', refresh=True)
+        self.assertFalse(old.exists())
+
+    def test_refresh_preserves_modified_obsolete_references(self):
+        self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')
+        old = self.out / 'skills/slimweb-mcp/references'
+        old.mkdir()
+        note = old / 'user.md'
+        note.write_text('user edit')
+        with self.assertRaises(FileExistsError):
+            self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp', refresh=True)
+        self.assertEqual(note.read_text(), 'user edit')
 
     def test_rejects_symlink_in_generated_tree(self):
         self.module.generate(self.out, 'slimweb-test', 'https://example.com/mcp')

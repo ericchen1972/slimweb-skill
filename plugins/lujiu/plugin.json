@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "slimweb-lujiu",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "SlimWeb MCP and complete ecommerce workflow skill",
   "author": {
     "name": "SlimWeb"

@@ -14,7 +14,7 @@ function option(name) {
 }
 const guide = await readFile(resolve(root, 'references/capability-map.md'), 'utf8');
 const marketing = await readFile(resolve(root, 'references/marketing-campaigns.md'), 'utf8');
-const entry = await readFile(resolve(root, 'SKILL.md'), 'utf8');
+const entry = await readFile(resolve(root, 'guides/overview.md'), 'utf8');
 const start = '<!-- BEGIN GENERATED CAPABILITY REFERENCE -->';
 const end = '<!-- END GENERATED CAPABILITY REFERENCE -->';
 let failures = 0;
@@ -47,7 +47,8 @@ for (const name of ['--webless-root', '--standalone-root']) {
 }
 const installed = option('--installed-root');
 if (installed) {
-  for (const file of ['SKILL.md', 'references/capability-map.md', 'references/marketing-campaigns.md', 'references/catalog-navigation.md', 'chatgpt-knowledge/slimweb-mcp-ai-guide.md']) {
+  // Installed clients receive the stable bootstrap only. Existing user files stay intact.
+  for (const file of ['SKILL.md']) {
     await output(resolve(installed, file), await readFile(resolve(root, file), 'utf8'));
   }
 }

@@ -83,4 +83,3 @@ For both Black Cat and frozen pickup and pay, copy the shop-specific `callback_u
 2. Read back the enabled status, bank code, and masked account information. If the connected server's schema lacks these fields, guide the merchant to **系統管理 → 金流物流 → 轉帳匯款** in the SlimWeb dashboard.
 3. Verify **轉帳匯款** at checkout displays the receiving bank code and account and requires the last five digits of the sender's account (匯款帳號末五碼). The order stays unpaid until the merchant reconciles the bank deposit and clicks **確認付款** in the order details.
 4. Bank transfer has no payment callback of its own. If the order later uses a logistics provider, follow that provider's logistics callback workflow.
-
