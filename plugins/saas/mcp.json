@@ -3,17 +3,7 @@
   "mcpServers": {
     "slimweb": {
       "type": "streamable-http",
-      "url": "https://slimweb-mcp-aakwcbp2ca-de.a.run.app/mcp",
-      "extensions": {
-        "com.openai": {
-          "auth": {
-            "type": "oauth",
-            "client": {
-              "mode": "dcr"
-            }
-          }
-        }
-      }
+      "url": "https://slimweb-mcp-aakwcbp2ca-de.a.run.app/mcp"
     }
   }
 }

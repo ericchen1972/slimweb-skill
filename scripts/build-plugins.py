@@ -51,10 +51,10 @@ def generate(output, name, url, refresh=False):
         skill.mkdir(parents=True)
         shutil.copyfile(ROOT / 'SKILL.md', skill / 'SKILL.md')
         shutil.copytree(ROOT / 'references', skill / 'references')
-        metadata = {'name': name, 'version': '1.0.0', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
+        metadata = {'name': name, 'version': '1.0.1', 'description': 'SlimWeb MCP and complete ecommerce workflow skill', 'author': {'name': 'SlimWeb'}, 'homepage': 'https://slimweb.tw', 'repository': 'https://github.com/ericchen1972/slimweb-skill'}
         dump(staging / 'plugin.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', **metadata})
         dump(staging / '.claude-plugin/plugin.json', metadata)
-        dump(staging / 'mcp.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', 'mcpServers': {'slimweb': {'type': 'streamable-http', 'url': url, 'extensions': {'com.openai': {'auth': {'type': 'oauth', 'client': {'mode': 'dcr'}}}}}}})
+        dump(staging / 'mcp.json', {'$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', 'mcpServers': {'slimweb': {'type': 'streamable-http', 'url': url}}})
         dump(staging / '.mcp.json', {'mcpServers': {'slimweb': {'type': 'http', 'url': url}}})
         dump(staging / MARKER, identity)
         if output.exists():

@@ -24,13 +24,22 @@ class PluginTests(unittest.TestCase):
             portable = json.loads((out / 'mcp.json').read_text())['mcpServers']['slimweb']
             self.assertEqual(portable['url'], url)
             self.assertEqual(portable['type'], 'streamable-http')
-            self.assertEqual(portable['extensions']['com.openai']['auth'], {'type':'oauth','client':{'mode':'dcr'}})
+            self.assertEqual(portable, {'type': 'streamable-http', 'url': url})
             self.assertEqual(json.loads((out / '.mcp.json').read_text())['mcpServers']['slimweb'], {'type':'http','url':url})
             self.assertEqual(json.loads((out / 'plugin.json').read_text())['name'], 'slimweb-' + target)
             self.assertEqual((out / 'skills/slimweb-mcp/SKILL.md').read_bytes(), (ROOT / 'SKILL.md').read_bytes())
             for source in (ROOT / 'references').rglob('*'):
                 if source.is_file():
                     self.assertEqual((out / 'skills/slimweb-mcp/references' / source.relative_to(ROOT / 'references')).read_bytes(), source.read_bytes())
+
+    def test_codex_portable_http_server_has_only_supported_fields(self):
+        # Codex 0.167 rejects unknown fields such as extensions before OAuth starts.
+        self.module.generate(self.out, 'slimweb-test', self.module.TARGETS['saas'])
+        config = json.loads((self.out / 'mcp.json').read_text())
+        for server in config['mcpServers'].values():
+            self.assertEqual(set(server) - {'type', 'url', 'headers'}, set())
+            self.assertEqual(server['type'], 'streamable-http')
+        self.assertEqual(json.loads((self.out / 'plugin.json').read_text())['version'], '1.0.1')
 
     def test_exact_custom_url_and_determinism(self):
         url = 'https://merchant.example/mcp?domain=shop.example&tenant=a%2Fb'

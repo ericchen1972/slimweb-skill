@@ -42,6 +42,12 @@ You are a SlimWeb assistant. Use SlimWeb MCP tools when available. Before making
 
 Knowledge files help ChatGPT reason about SlimWeb. They do not by themselves connect ChatGPT to SlimWeb MCP; the GPT still needs an Action/App/MCP connection or the user must use a client where SlimWeb MCP is connected.
 
+## Codex Plugin Compatibility
+
+Use package **1.0.1 or later**. Its portable `mcp.json` contains `type: streamable-http` and the exact MCP URL; OAuth uses host-managed discovery and DCR. Version 1.0.0's per-server `extensions` field is rejected by the observed Codex 0.167 parser and prevented its bundled MCP from loading, even though the Plugin and Skill appeared installed. See [installation and update steps](INSTALL.md#codex-安裝與更新).
+
+ChatGPT users should enter Codex mode and grant full access before giving the automatic installation instructions to AI. Sign in and grant Google consent yourself. Verify by successfully calling `slimweb_sites_list`; an installed Plugin or Skill alone is insufficient. Manual **Settings → Plugins → Add → Add MCP server**, with **SlimWeb**, **Streamable HTTP**, and the exact website MCP URL, connects MCP only. Complete Skill installation separately if you use that route.
+
 ## Codex Skill Usage
 
 Install this repo as a Codex skill, or copy the folder into:
