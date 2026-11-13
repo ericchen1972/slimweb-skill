@@ -92,5 +92,6 @@ python3 scripts/build-plugins.py --name slimweb-myshop --url 'https://YOUR-HOST/
 - `.agents/plugins/marketplace.json` 和 `.claude-plugin/marketplace.json` 為各宿主不同格式的自管清單，不代表公開市集審核或上架。
 - 1.0.1 修正 Codex 已實際回報的 `extensions` 解析錯誤；不因文件列出某個 extension 就假設每個宿主版本都能解析。自動測試限制可攜 HTTP server 的欄位，避免再次產生此不相容設定。
 - 自動化測試涵蓋 URL 保留、無效輸入拒絕、資料夾保護、完整參考檔複製與可重建一致性。這不等同每個宿主已完成真實 Google 授權；最終以該宿主實際連線及 `slimweb_sites_list` 成功為準。
+- 2026-11-14：Codex 0.167.0-alpha.4.1 的 SaaS Plugin 1.0.1 已完成真實 Google 授權；移除同 URL 的裸 MCP 後，原生 app-server 確認 `pluginId: slimweb-saas@slimweb`、152 個工具、`toolsError: null`，且 `slimweb_sites_list` 成功返回授權網站。此結果驗證 SaaS Plugin；陸玖及其他單機版的個別帳號授權仍須在其實際宿主驗證。
 
 官方格式參考：[OpenAI Plugin 包裝](https://developers.openai.com/plugins/build/plugins)、[Agent Plugins Manifest Schema](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json)、[MCP Schema](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json)、[Claude Plugin reference](https://code.claude.com/docs/en/plugins-reference)。
